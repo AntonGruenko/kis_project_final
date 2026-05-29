@@ -1,0 +1,11 @@
+swagger: "2.0"
+
+info:
+  title: "Notes API — Team 01"
+  version: "1.0.0"
+  description: "Простой API для управления заметками (Развертывание на порту 8001)"
+
+basePath: "/api"
+
+schemes:
+  - "http"
