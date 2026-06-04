@@ -1,0 +1,99 @@
+---
+- name: Deploy Project 01 (Version 3 - Docker)
+  hosts: webservers
+  become: true
+
+  vars:
+    group_code: "01"
+
+    repo_url: "https://github.com/AntonGruenko/kis_project.git"
+    repo_branch: "main"
+
+    repo_root: "/opt/project_01"
+
+    old_service_name: "project_01-backend.service"
+    old_nginx_conf: "project_01.conf"
+
+  tasks:
+
+    - name: Stop old backend service
+      ansible.builtin.systemd:
+        name: "{{ old_service_name }}"
+        state: stopped
+        enabled: false
+      failed_when: false
+
+    - name: Remove old nginx config
+      ansible.builtin.file:
+        path: "/etc/nginx/sites-enabled/{{ old_nginx_conf }}"
+        state: absent
+      notify: Restart Host Nginx
+
+    - name: Update repository
+      ansible.builtin.git:
+        repo: "{{ repo_url }}"
+        dest: "{{ repo_root }}"
+        version: "{{ repo_branch }}"
+        force: yes
+
+    - name: Start docker compose
+      community.docker.docker_compose_v2:
+        project_src: "{{ repo_root }}"
+        state: present
+        build: always
+
+  handlers:
+
+    - name: Restart Host Nginx
+      ansible.builtin.systemd:
+        name: nginx
+        state: restarted1~---
+- name: Deploy Project 01 (Version 3 - Docker)
+  hosts: webservers
+  become: true
+
+  vars:
+    group_code: "01"
+
+    repo_url: "https://github.com/AntonGruenko/kis_project.git"
+    repo_branch: "main"
+
+    repo_root: "/opt/project_01"
+
+    old_service_name: "project_01-backend.service"
+    old_nginx_conf: "project_01.conf"
+
+  tasks:
+
+    - name: Stop old backend service
+      ansible.builtin.systemd:
+        name: "{{ old_service_name }}"
+        state: stopped
+        enabled: false
+      failed_when: false
+
+    - name: Remove old nginx config
+      ansible.builtin.file:
+        path: "/etc/nginx/sites-enabled/{{ old_nginx_conf }}"
+        state: absent
+      notify: Restart Host Nginx
+
+    - name: Update repository
+      ansible.builtin.git:
+        repo: "{{ repo_url }}"
+        dest: "{{ repo_root }}"
+        version: "{{ repo_branch }}"
+        force: yes
+
+    - name: Start docker compose
+      community.docker.docker_compose_v2:
+        project_src: "{{ repo_root }}"
+        state: present
+        build: always
+
+  handlers:
+
+    - name: Restart Host Nginx
+      ansible.builtin.systemd:
+        name: nginx
+        state: restarted
