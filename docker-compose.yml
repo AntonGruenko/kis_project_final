@@ -42,7 +42,8 @@ services:
       - backend
     networks:
       - project_01-network
-    prometheus:
+
+  prometheus:
     image: prom/prometheus:latest
     container_name: project_01-prometheus
     ports:
