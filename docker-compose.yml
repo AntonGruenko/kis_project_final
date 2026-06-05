@@ -42,6 +42,27 @@ services:
       - backend
     networks:
       - project_01-network
+    prometheus:
+    image: prom/prometheus:latest
+    container_name: project_01-prometheus
+    ports:
+      - "9001:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - backend
+    networks:
+      - project_01-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: project_01-grafana
+    ports:
+      - "3001:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - project_01-network
 
 volumes:
   pgdata_01:
